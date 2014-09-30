@@ -101,17 +101,24 @@ NextNode<T>** SortedListLinked<T>::find(T* item)
 {
    NextNode<T>* prev = NULL;
    NextNode<T>* curr = head;
-
+ 
    //DO THIS
    //loop to find the correct location to insert/remove item
-	while((curr != NULL) && (item > curr->getItem()))
+	int index = compare_items(item, curr->getItem());
+
+	while((curr != NULL)&&(index > 0))
 	{
 		prev = curr;
-		curr-> getNext();
-
+		curr = curr->getNext();
+		
+		if(curr != NULL)
+		{ 
+			index = compare_items(item, curr->getItem());
+		}
+		
+		
 	}
-
-
+	
    //could simply return prev and compute curr, but prev might be null
    //this way results in somewhat simpler code in add and remove
    NextNode<T>** nodes = new NextNode<T>*[2];
@@ -141,29 +148,21 @@ void SortedListLinked<T>::add(T* item)
 
    //DO THIS
    //adding to the top of the list (check prev)
-   if (prev == NULL)
+   if (prev == 0)
    {
-		NextNode<T>* new_node = new NextNode<T>(item);
-		
-		
-			
-			 new_node->setNext(curr):
-			 head = new_node;
-			
+	NextNode<T>* new_node = new NextNode<T>(item);
+		head = new_node;
 
-
+	new_node->setNext(curr);
 
    }
    else    //general add
    {
-		
-		
-		NextNode<T> new_node = new NextNode<T>(item);
-		prev -> setNext(new_node);
-		new_node->setNext(curr);
-		
+	NextNode<T>* node = new NextNode<T>(item);
+	
+	prev->setNext(node);
+	node->setNext(curr);
    }
-   delete[] nodes;
 
    sze++;
 }
@@ -186,7 +185,7 @@ void SortedListLinked<T>::remove(T* item)
    //if curr has run off of the end of the list, item is not there
    //if item and curr's item aren't equal, item is not there
 
-   if (curr == NULL)
+   if ((curr == NULL)||(curr->getItem() != item))
    {
       return;  //item not present
    }
@@ -195,7 +194,7 @@ void SortedListLinked<T>::remove(T* item)
    int compare = (*compare_items) (item, curr->getItem());
 
    //determine whether the item to be removed is present
-   if (   prev                    )
+   if (compare != 0)
    {
       return;  //item not present
    }
@@ -205,24 +204,25 @@ void SortedListLinked<T>::remove(T* item)
    if (prev == NULL)
    {
 	NextNode<T>* node = new NextNode<T>(item);
+	
 	node = curr;
-	curr = curr->getNext();
-	curr->setNext(curr);
-	node = NULL;
-	head = curr;
-
+	//curr = curr->getNext();
+	head = curr->getNext();
+	node->setNext(NULL);
+	delete node;
+	//xcout << "hello" << endl;
 
    }
    else  //general remove
    {
+	NextNode<T>* node = new NextNode<T>(item);
+	node = prev->getNext();
+	prev->setNext(curr->getNext());
+	node->setNext(NULL);
 
-	prev->setNext(curr);
-	node->setNext(node)
-	node = NULL;
-	
-
+	delete node;
    }
-
+   
    delete curr;
    sze--;
 }

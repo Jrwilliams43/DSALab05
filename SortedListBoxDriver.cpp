@@ -1,3 +1,4 @@
+//https://github.com/Jrwilliams43/DSALab05
 #include <gtkmm/main.h>
 #include <gtkmm/table.h>
 #include <gtkmm/window.h>
@@ -19,9 +20,11 @@ void addCDs(ListArray<CD>* list, ListBox<CD>* lb)
 
    //DO THIS
    //iterate over and add the cds to the list box (use lb->addItem)
-
-
-
+	while(iter->hasNext())
+	{
+		CD* item = iter->next();
+		lb->addItem(item);
+	}
 
    delete iter;
 }
@@ -32,9 +35,11 @@ void deleteCDs(ListArray<CD>* list)
 
    //DO THIS  
    //iterate over and delete the cds
-
-
-
+	while(iter->hasNext())
+	{
+		CD* item = iter->next();
+		delete item;
+	}
 
    delete iter;
 }
@@ -45,9 +50,9 @@ int main(int argc, char* argv[])
    ListArray<CD>* cds = CD::readCDs("cds.txt");
    //DO THIS
    //create the sorted linked list (call it sorted_list)
-
-
-
+	SortedListLinked<CD>* sorted_list = new SortedListLinked<CD>(CD::compare_items);
+	
+	
 
    String title("CDs");
    ListBox<CD>* lstCDs = new ListBox<CD>(&title, sorted_list);
